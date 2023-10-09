@@ -1,4 +1,4 @@
-package ru.sh.weatherforecastrestapp.config;
+package ru.sh.clinicservice.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;

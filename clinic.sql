@@ -1,3 +1,7 @@
+drop table if exists clients;
+drop table if exists pets;
+drop table if exists consultations;
+
 create table clients
 (
     id       integer primary key,
@@ -9,18 +13,17 @@ create table clients
 create table pets
 (
     id        integer primary key,
-    client_id integer,
     name      text,
-    birthday  text,
-    foreign key (client_id) REFERENCES clients (id)
+    birthday  text
 );
 
-create table consultation
+create table consultations
 (
     id       integer primary key,
     client_id integer,
     pet_id integer,
-    visite_date text,
+    visit_date text,
+    description text,
     foreign key (client_id) references clients(id),
     foreign key (pet_id) references pets(id)
 );
