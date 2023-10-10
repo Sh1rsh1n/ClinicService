@@ -28,22 +28,12 @@ public class ClientService {
     }
 
     @Transactional
-    public void addClient(Client client) {
-        if (!clientRepository.findAll().contains(client)) {
-            clientRepository.save(client);
-        }
+    public void saveClient(Client client) {
+        clientRepository.save(client);
     }
 
     @Transactional
-    public void editClient(Client client) {
-        Optional<Client> optional = clientRepository.findById(client.getId());
-        if (optional.isPresent()) {
-
-        }
-    }
-
-    @Transactional
-    public void deleteClient(Client client) {
-        clientRepository.delete(client);
+    public void deleteClient(int id) {
+        clientRepository.deleteById(id);
     }
 }

@@ -35,11 +35,13 @@ public class ClinicController {
 
     @PutMapping(produces = APPLICATION_JSON_VALUE)
     public HttpStatus editConsultation(@RequestBody Consultation consultation) {
-        if (!consultationService.getAllConsultation().contains(consultation))
-            return HttpStatus.NOT_FOUND;
-
-        consultationService.editConsultation(consultation);
-        return HttpStatus.OK;
+        for (Consultation consultation1 : consultationService.getAllConsultation()) {
+            if (consultation1.getId() == consultation.getId()) {
+                consultationService.editConsultation(consultation);
+                return HttpStatus.OK;
+            }
+        }
+        return HttpStatus.NOT_FOUND;
     }
 
     @GetMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)
@@ -52,9 +54,9 @@ public class ClinicController {
         return ResponseEntity.ok(consultationService.getAllConsultation());
     }
 
-    @DeleteMapping(produces = APPLICATION_JSON_VALUE)
-    public HttpStatus deleteConsultation(@RequestBody Consultation consultation) {
-        consultationService.deleteConsultation(consultation.getId());
+    @DeleteMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)
+    public HttpStatus deleteConsultation(@PathVariable String id) {
+        consultationService.deleteConsultation(Integer.parseInt(id));
         return HttpStatus.OK;
     }
 }

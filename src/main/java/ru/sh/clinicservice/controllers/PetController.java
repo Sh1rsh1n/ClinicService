@@ -23,9 +23,9 @@ public class PetController {
         this.petService = petService;
     }
 
-    @GetMapping(value = "{name}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Pet> getPet(@PathVariable String name) {
-        return ResponseEntity.ok(petService.getPetByName(name));
+    @GetMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Pet> getPet(@PathVariable String id) {
+        return ResponseEntity.ok(petService.getPetById(Integer.parseInt(id)));
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -48,9 +48,9 @@ public class PetController {
         return HttpStatus.OK;
     }
 
-    @DeleteMapping(produces = APPLICATION_JSON_VALUE)
-    public HttpStatus deletePet(@RequestBody Pet pet) {
-        petService.deletePet(pet);
+    @DeleteMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)
+    public HttpStatus deletePet(@PathVariable String id) {
+        petService.deletePet(Integer.parseInt(id));
         return HttpStatus.OK;
     }
 }

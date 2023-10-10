@@ -28,18 +28,20 @@ public class ClientController {
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     @Operation(summary = "Добавление данных о клиенте", description = "Позволяет добавить данные о клиенте")
     public HttpStatus addClient(@RequestBody Client client) {
-        clientService.addClient(client);
+        clientService.saveClient(client);
         return HttpStatus.OK;
     }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE)
     @Operation(summary = "Изменение данных о клиенте", description = "Позволяет изменять данные о клиенте")
     public HttpStatus editClient(@RequestBody Client client) {
-        if (!clientService.getAllClients().contains(client))
-            return HttpStatus.NOT_FOUND;
-
-        clientService.editClient(client);
-        return HttpStatus.OK;
+        for (Client client1: clientService.getAllClients()) {
+            if (client1.getId() == client.getId()) {
+                clientService.saveClient(client);
+                return HttpStatus.OK;
+            }
+        }
+        return HttpStatus.NOT_FOUND;
     }
 
     @GetMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)
@@ -54,10 +56,10 @@ public class ClientController {
         return ResponseEntity.ok(clientService.getAllClients());
     }
 
-    @DeleteMapping(produces = APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)
     @Operation(summary = "Удаление данных о клиенте", description = "Позволяет удалить данные о клиенте")
-    public HttpStatus deleteClient(@RequestBody Client client) {
-        clientService.deleteClient(client);
+    public HttpStatus deleteClient(@PathVariable String id) {
+        clientService.deleteClient(Integer.parseInt(id));
         return HttpStatus.OK;
     }
 

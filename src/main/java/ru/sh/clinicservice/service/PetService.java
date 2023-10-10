@@ -24,8 +24,8 @@ public class PetService {
         return petRepository.findAll();
     }
 
-    public Pet getPetByName(String petName) {
-        return petRepository.findAll().stream().filter(pet -> pet.getName().equals(petName)).findFirst().get();
+    public Pet getPetById(int id) {
+        return petRepository.findAll().stream().filter(pet -> pet.getId() == id).findFirst().orElseGet(null);
     }
 
     @Transactional
@@ -39,8 +39,8 @@ public class PetService {
     }
 
     @Transactional
-    public void deletePet(Pet pet) {
-        petRepository.delete(pet);
+    public void deletePet(int id) {
+        petRepository.deleteById(id);
     }
 
 
