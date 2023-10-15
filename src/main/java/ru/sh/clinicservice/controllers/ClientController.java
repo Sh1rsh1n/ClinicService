@@ -28,20 +28,21 @@ public class ClientController {
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     @Operation(summary = "Добавление данных о клиенте", description = "Позволяет добавить данные о клиенте")
     public HttpStatus addClient(@RequestBody Client client) {
-        clientService.saveClient(client);
-        return HttpStatus.OK;
+        if (clientService.saveClient(client)) {
+            return HttpStatus.OK;
+        }
+        return HttpStatus.BAD_REQUEST;
     }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE)
     @Operation(summary = "Изменение данных о клиенте", description = "Позволяет изменять данные о клиенте")
     public HttpStatus editClient(@RequestBody Client client) {
-        for (Client client1: clientService.getAllClients()) {
-            if (client1.getId() == client.getId()) {
-                clientService.saveClient(client);
+        for (Client client1 : clientService.getAllClients()) {
+            if (client1.getId() == client.getId() && clientService.saveClient(client)) {
                 return HttpStatus.OK;
             }
         }
-        return HttpStatus.NOT_FOUND;
+        return HttpStatus.BAD_REQUEST;
     }
 
     @GetMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)

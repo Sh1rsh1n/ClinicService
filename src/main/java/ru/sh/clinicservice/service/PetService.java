@@ -16,8 +16,12 @@ public class PetService {
     private PetRepository petRepository;
 
     @Transactional
-    public void addPet(Pet pet) {
-        petRepository.save(pet);
+    public boolean addPet(Pet pet) {
+        if (pet != null) {
+            petRepository.save(pet);
+            return true;
+        }
+        throw new RuntimeException("Incorrect request of adding Pet");
     }
 
     public List<Pet> getAllPet() {
@@ -25,17 +29,23 @@ public class PetService {
     }
 
     public Pet getPetById(int id) {
-        return petRepository.findAll().stream().filter(pet -> pet.getId() == id).findFirst().orElseGet(null);
+        Optional<Pet> optional = petRepository.findById(id);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        throw new RuntimeException("Incorrect pet ID");
     }
 
     @Transactional
-    public void editPet(Pet pet) {
+    public boolean editPet(Pet pet) {
         Optional<Pet> optional = petRepository.findById(pet.getId());
         if (optional.isPresent()) {
             Pet editPet = optional.get();
             editPet.setName(pet.getName());
             editPet.setBirthday(pet.getBirthday());
+            return true;
         }
+        return false;
     }
 
     @Transactional

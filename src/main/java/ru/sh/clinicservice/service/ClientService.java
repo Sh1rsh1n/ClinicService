@@ -28,8 +28,12 @@ public class ClientService {
     }
 
     @Transactional
-    public void saveClient(Client client) {
-        clientRepository.save(client);
+    public boolean saveClient(Client client) {
+        if (client != null) {
+            clientRepository.save(client);
+            return true;
+        }
+        return false;
     }
 
     @Transactional

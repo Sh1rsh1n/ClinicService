@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.sh.clinicservice.models.Client;
 import ru.sh.clinicservice.models.Pet;
 import ru.sh.clinicservice.service.PetService;
 
@@ -24,7 +23,7 @@ public class PetController {
     }
 
     @GetMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Pet> getPet(@PathVariable String id) {
+    public ResponseEntity<Pet> getPetById(@PathVariable String id) {
         return ResponseEntity.ok(petService.getPetById(Integer.parseInt(id)));
     }
 
@@ -35,17 +34,18 @@ public class PetController {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     public HttpStatus addPet(@RequestBody Pet pet) {
-        petService.addPet(pet);
-        return HttpStatus.OK;
+        if (petService.addPet(pet)) {
+            return HttpStatus.OK;
+        }
+        return HttpStatus.BAD_REQUEST;
     }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE)
     public HttpStatus editPet(@RequestBody Pet pet) {
-        if (!petService.getAllPet().contains(pet)) {
-            return HttpStatus.NOT_FOUND;
+        if (petService.getAllPet().contains(pet) && petService.editPet(pet)) {
+            return HttpStatus.OK;
         }
-        petService.editPet(pet);
-        return HttpStatus.OK;
+        return HttpStatus.NOT_FOUND;
     }
 
     @DeleteMapping(value = "{id}", produces = APPLICATION_JSON_VALUE)
